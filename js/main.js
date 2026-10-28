@@ -1,5 +1,5 @@
 /**
- * EZION TECHNOLOGIES - MAIN SCRIPT
+ * EZION TECHNOLOGIES & EZION MEDIA - MAIN SCRIPT
  * High performance, zero-dependency interactions & animations
  */
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
-  // 2. Mobile Navigation Toggle
+  // 2. Mobile Navigation Toggle & Drawer
   const mobileToggle = document.querySelector('.mobile-nav-toggle');
   const mobileDrawer = document.querySelector('.mobile-menu-drawer');
   if (mobileToggle && mobileDrawer) {
@@ -58,130 +58,35 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   window.addEventListener('scroll', highlightNav, { passive: true });
 
-  // 4. Counter Animation for Stats
-  const statNumbers = document.querySelectorAll('.counter-val');
-  let animated = false;
+  // 4. "Enquire" Link Behavior on Service Cards
+  const enquireLinks = document.querySelectorAll('.service-enquire-link');
+  const serviceSelect = document.getElementById('service-select');
+  const projectMessage = document.getElementById('project-message');
 
-  const countUp = (el, target) => {
-    let start = 0;
-    const duration = 1600;
-    const startTime = performance.now();
-
-    const update = (currentTime) => {
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(easeOut * target);
-      el.textContent = current;
-
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      } else {
-        el.textContent = target;
-      }
-    };
-    requestAnimationFrame(update);
-  };
-
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animated) {
-        statNumbers.forEach(item => {
-          const target = parseInt(item.getAttribute('data-target'), 10);
-          if (!isNaN(target)) {
-            countUp(item, target);
+  enquireLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const serviceName = link.getAttribute('data-service');
+      if (serviceSelect && serviceName) {
+        // Find matching option in select
+        for (let i = 0; i < serviceSelect.options.length; i++) {
+          if (serviceSelect.options[i].value === serviceName) {
+            serviceSelect.selectedIndex = i;
+            break;
           }
-        });
-        animated = true;
+        }
       }
-    });
-  }, { threshold: 0.3 });
-
-  const statsBanner = document.querySelector('.stats-banner');
-  if (statsBanner) {
-    statObserver.observe(statsBanner);
-  }
-
-  // 5. Services Filter Tabs
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const serviceCards = document.querySelectorAll('.service-card');
-  const categoryHeaders = document.querySelectorAll('.category-header');
-
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const filter = btn.getAttribute('data-filter');
-
-      categoryHeaders.forEach(header => {
-        const cat = header.getAttribute('data-category');
-        if (filter === 'all' || filter === cat) {
-          header.style.display = 'flex';
-        } else {
-          header.style.display = 'none';
-        }
-      });
-
-      serviceCards.forEach(card => {
-        const cat = card.getAttribute('data-category');
-        if (filter === 'all' || filter === cat) {
-          card.style.display = 'flex';
-          card.style.opacity = '0';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transition = 'opacity 0.3s ease';
-          }, 20);
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-
-  // 6. Modal Handler (Get a Quote)
-  const quoteModal = document.getElementById('quote-modal');
-  const openQuoteBtns = document.querySelectorAll('.btn-open-quote');
-  const closeBtns = document.querySelectorAll('.modal-close-btn, .modal-overlay-backdrop');
-
-  const openModal = (modal) => {
-    if (!modal) return;
-    modal.classList.add('is-active');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = (modal) => {
-    if (!modal) return;
-    modal.classList.remove('is-active');
-    document.body.style.overflow = '';
-  };
-
-  openQuoteBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openModal(quoteModal);
-    });
-  });
-
-  // Close modals on click
-  document.querySelectorAll('.modal-overlay').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal || e.target.closest('.modal-close-btn')) {
-        closeModal(modal);
+      // If contact form is on the same page, scroll and focus message
+      const contactSec = document.getElementById('contact');
+      if (contactSec) {
+        setTimeout(() => {
+          projectMessage?.focus();
+        }, 600);
       }
     });
   });
 
-  // Close modals on ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.is-active').forEach(m => closeModal(m));
-    }
-  });
-
-
-
-  // 7. Interactive Form Submissions with Feedback
-  const handleFormSubmit = (formId, toastId) => {
+  // 5. Interactive Form Submissions with Toast Feedback
+  const setupFormSubmission = (formId, toastId) => {
     const form = document.getElementById(formId);
     const toast = document.getElementById(toastId);
     if (!form) return;
@@ -194,11 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `
-          <svg style="animation: spin 1s linear infinite; width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg style="animation: spin 1s linear infinite; width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
             <path d="M12 2a10 10 0 0 1 10 10"></path>
           </svg>
-          Submitting...
+          Sending...
         `;
       }
 
@@ -210,41 +115,27 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         if (toast) {
           toast.style.display = 'flex';
+          toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           setTimeout(() => {
             toast.style.display = 'none';
-          }, 6000);
+          }, 7000);
         }
-        // If it was a modal form, auto close after 2s
-        if (form.closest('.modal-overlay')) {
-          setTimeout(() => {
-            closeModal(form.closest('.modal-overlay'));
-          }, 1800);
-        }
-      }, 900);
+      }, 850);
     });
   };
 
-  handleFormSubmit('contact-form', 'contact-toast');
-  handleFormSubmit('modal-quote-form', 'modal-quote-toast');
+  setupFormSubmission('contact-form', 'contact-toast');
+  setupFormSubmission('detailed-proposal-form', 'detailed-proposal-toast');
 
-  // 8. Global Network Node Hover Interactivity
+  // 6. Interactive Network Nodes Hover Info
   const networkNodes = document.querySelectorAll('.interactive-node');
-  const networkInfo = document.getElementById('network-hover-info');
-
   networkNodes.forEach(node => {
+    node.style.cursor = 'pointer';
     node.addEventListener('mouseenter', () => {
-      const city = node.getAttribute('data-city');
-      const info = node.getAttribute('data-info');
-      if (networkInfo) {
-        networkInfo.innerHTML = `<strong>${city}:</strong> ${info}`;
-        networkInfo.style.opacity = '1';
-      }
+      node.querySelector('.node-circle')?.setAttribute('r', '10');
     });
-
     node.addEventListener('mouseleave', () => {
-      if (networkInfo) {
-        networkInfo.innerHTML = 'Hover over any node to inspect global hubs & delivery synchronization.';
-      }
+      node.querySelector('.node-circle')?.setAttribute('r', '8');
     });
   });
 });

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 190" width="100%" height="100%" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&amp;display=swap');
+      .logo-main-w-title {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 700;
+        fill: #FFFFFF;
+        letter-spacing: -1.5px;
+      }
+      .logo-main-w-tech {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 600;
+        fill: #7DD3D0;
+        letter-spacing: 0.5px;
+      }
+      .logo-main-w-sep {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 400;
+        fill: #94A3B8;
+      }
+      .logo-main-w-media {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 600;
+        fill: #FBBF24;
+        letter-spacing: 0.5px;
+      }
+    </style>
+  </defs>
+  
+  <!-- Overlapping Brand Circles for Dark Background -->
+  <g style="isolation: isolate;">
+    <circle cx="84" cy="76" r="54" fill="#38BDF8" style="mix-blend-mode: screen; opacity: 0.85;" />
+    <circle cx="152" cy="76" r="54" fill="#14F1D9" style="mix-blend-mode: screen; opacity: 0.85;" />
+    <circle cx="118" cy="130" r="54" fill="#F59E0B" style="mix-blend-mode: screen; opacity: 0.9;" />
+  </g>
+
+  <!-- Wordmark -->
+  <text class="logo-main-w-title" x="228" y="106" font-size="84">Ezion</text>
+  <text class="logo-main-w-tech" x="232" y="152" font-size="28">Technologies</text>
+  <text class="logo-main-w-sep" x="400" y="152" font-size="26">·</text>
+  <text class="logo-main-w-media" x="420" y="152" font-size="28">Media</text>
+</svg>
